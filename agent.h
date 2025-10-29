@@ -35,6 +35,7 @@ public:
     // Сеттеры и утилиты
     void setTarget(int ame, int dist);
     void addEnergy(int amount);
+    void Moovе(); 
     
 };
 
