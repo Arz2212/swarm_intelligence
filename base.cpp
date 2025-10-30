@@ -7,7 +7,7 @@ int Base::getEnergy() const {
 }
 
 int Base::create() {
-    energy -= 1;
+    energy--;
     if (energy < 0)
         energy = 0;
     return energy > 0 ? 1 : 0;
