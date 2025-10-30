@@ -2,7 +2,7 @@
 #include <cmath>
 
 
-agent::agent(int x, int y, double spd, int rad) 
+agent::agent(double x, double y, double spd, int rad) 
     : speed(spd), radius(rad), energy(100) {
     coordinates[0] = x;
     coordinates[1] = y;
@@ -11,7 +11,7 @@ agent::agent(int x, int y, double spd, int rad)
     distA = 0;
     distB = 0;}
 
-    std::array<int, 2> agent::getPosition() const {
+    std::array<double, 2> agent::getPosition() const {
     return coordinates;
 }
 
@@ -23,17 +23,31 @@ agent::agent(int x, int y, double spd, int rad)
         return energy > 0;
 }
     int agent::getdistA(){
-        return distA
+        return distA;
     }
 
     int agent::getdistB(){
-        return distB
+        return distB;
     } 
     void agent::cheng_direction(agent& otheragent){
-        direction = otheragent.direction
+        direction = otheragent.direction;
     }
     bool agent::operator > (const agent& otheragent){
-        return distA > otheragent.distA
+        return distA > otheragent.distA;
+    }
+    bool agent::agent_near(const agent& otheragent)
+    {
+        double f;
+        f = sqrt(pow((coordinates[0] + otheragent.coordinates[0]), 2) + pow((coordinates[1] + otheragent.coordinates[1]), 2));
+        return f <= 50.0;
+    }
+
+    void agent::Moovе(){
+        coordinates[0] += speed * cos(direction);
+        coordinates[1] += speed * cos(direction);
+        speed = speed * ((rand(56) % 400 - 200) / 1000 + 1);
+        direction = direction * ((rand(98) % 400 - 200) / 1000 + 1);
+        energy-- ;
     }
 
 
