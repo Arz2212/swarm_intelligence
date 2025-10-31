@@ -1,9 +1,12 @@
 #include "food.h"
 
-Food::Food(int e, int x, int y) : energy(e), coordinates{x, y} {}
+Food::Food(int e, int x, int y, int r) : energy(e), coordinates{x, y}, rad(r){}
 
 int Food::getEnergy() const {
     return energy;
+}
+int Food::getRaius() const{
+    return rad;
 }
 
 int Food::consumeEnergy() {

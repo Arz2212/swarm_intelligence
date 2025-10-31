@@ -1,13 +1,14 @@
 #ifndef AGENT_H
 #define AGENT_H
 #include <array>
+class Food;
 
 class agent
 {
 private:
     double speed;
     std::array<double, 2> coordinates;
-    int ame; // цель поиска (база еда может определенный тип еды)
+    int ame; // цель поиска 0 А 1 Б(база еда может определенный тип еды)
     double direction; // направление куда агент движеться 
     const int radius; // радиус на котором его слышно
     int distA; // расстояние до базы
@@ -16,7 +17,7 @@ private:
 
 
 public:
-    agent(int x, int y, double speed, int radius)
+    agent(double x, double y, double speed, int radius);
     
     
     // Виртуальный деструктор для корректного удаления объектов дочерних классов

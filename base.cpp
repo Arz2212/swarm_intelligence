@@ -1,7 +1,11 @@
 #include "base.h"
+#include <array>
 
-Base::Base(int e, int x, int y) : energy(e), coordinates{x, y} {}
+Base::Base(int e, int x, int y, int r) : energy(e), coordinates{x, y}, rad(r){}
 
+int Base::getRadius() const {
+    return rad;
+}
 int Base::getEnergy() const {
     return energy;
 }
