@@ -7,14 +7,14 @@
 
 class Worker : public Agent {
 private:
-    int carriedEnergy;
+    int carriedEnergy; // количество переносимой энергии 
 
 public:
     Worker(double x, double y);
     
     void moove() override;
-    void collectFood(Food& food);
-    void deliverToBase(Base& base);
+    void collectFood(Food& food); // забирает еду
+    void deliverToBase(Base& base); // доставляет еду
     int getCarriedEnergy() const;
     void resetCarriedEnergy();
 };

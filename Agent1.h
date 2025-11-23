@@ -10,11 +10,11 @@ class Agent
 {
 protected:
     std::array<double, 2> coordinates;
-    int ame;
-    double distA;
-    double distB;
-    int radius;
-    double speed;
+    int ame; // цель
+    double distA; // растояние до цели A
+    double distB;// растояние до цели В
+    int radius; // радиус крика
+    double speed; 
     int energy;
     double direction;
     
@@ -25,11 +25,15 @@ public:
     virtual void operator = (Agent& other);
 
     bool isAlive() const;
+
+    // проверка нахождения рядом агентов
     bool agent_near(const Agent& other) const;
     bool base_near(const Base& other) const;
     bool food_near(const Food& other) const;
 
-    void cheng_direction_and_ame();
+
+    void cheng_direction();   // смена направления 
+    void cheng_ame();
     virtual void moove();
     
     std::array<double, 2> getCoordinates() const { return coordinates; }

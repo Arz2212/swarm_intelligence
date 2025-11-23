@@ -43,7 +43,6 @@ public:
     void addWorker(double x, double y);
     void addFood(int energy, double x, double y);
     
-    void printStatistics() const;
     int getTotalEnergy() const { return totalEnergyCollected; }
     int getSteps() const { return stepsCompleted; }
     int getAliveAgents() const;

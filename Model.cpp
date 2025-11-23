@@ -6,7 +6,7 @@
 
 Model::Model(double width, double height) 
     : mapWidth(width), mapHeight(height), 
-      base(1000, width/2, height/2, 100),
+      base(1000, width/2, height/2, 200),
       totalEnergyCollected(0), stepsCompleted(0), 
       agentsDied(0), foodConsumed(0) {
     std::srand(std::time(0));
@@ -31,7 +31,7 @@ void Model::initializeSimulation(int numScouts, int numWorkers, int numFood) {
     for (int i = 0; i < numFood; ++i) {
         double x = (std::rand() % static_cast<int>(mapWidth));
         double y = (std::rand() % static_cast<int>(mapHeight));
-        addFood(10 + std::rand() % 20, x, y);
+        addFood(10000 + std::rand() % 20, x, y);
     }
     
     std::cout << "Simulation initialized successfully" << std::endl;
@@ -59,10 +59,6 @@ void Model::simulate(int steps) {
     for (int i = 0; i < steps; ++i) {
         simulateStep();
         
-        if (i % 100 == 0) {
-            std::cout << "Step " << i << "/" << steps << std::endl;
-            printStatistics();
-        }
     }
     
     std::cout << "Simulation completed after " << steps << " steps" << std::endl;
@@ -77,7 +73,7 @@ void Model::addWorker(double x, double y) {
 }
 
 void Model::addFood(int energy, double x, double y) {
-    foods.emplace_back(energy, x, y, 15);
+    foods.emplace_back(energy, x, y, 50);
 }
 
 void Model::checkAgentInteractions() {
@@ -97,18 +93,19 @@ void Model::checkAgentInteractions() {
 
 // Исправленный метод - используем cheng_direction_and_ame для разворота
 void Model::checkFoodInteraction() {
+    
     for (auto& agent : agents) {
         if (!agent->isAlive()) continue;
         
         for (auto& food : foods) {
             if (food.is_energy() && agent->food_near(food)) {
                 // Все агенты разворачиваются при встрече с едой
-                agent->cheng_direction_and_ame();
                 
                 // Если агент - рабочий, то он также собирает энергию
                 Worker* worker = dynamic_cast<Worker*>(agent.get());
                 if (worker) {
                     worker->collectFood(food);
+
                     if (!food.is_energy()) {
                         foodConsumed++;
                     }
@@ -125,30 +122,19 @@ void Model::checkBaseDelivery() {
         if (!agent->isAlive()) continue;
         
         Worker* worker = dynamic_cast<Worker*>(agent.get());
-        if (worker && agent->base_near(base)) {
-            int delivered = worker->getCarriedEnergy();
-            if (delivered > 0) {
-                base.receiveEnergy(delivered);
-                totalEnergyCollected += delivered;
-                worker->resetCarriedEnergy();
-                std::cout << "Energy delivered to base: " << delivered << " units" << std::endl;
-            }
-        }
-    }
+        worker->deliverToBase(base);
 }
-
+}
 void Model::handleBoundaries(Agent& agent) {
     auto coords = agent.getCoordinates();
     double x = coords[0];
     double y = coords[1];
     
     if (x < 0 || x > mapWidth || y < 0 || y > mapHeight) {
-        agent.cheng_direction_and_ame();
-        
-        if (x < 0) agent.setCoordinates(0, y);
-        if (x > mapWidth) agent.setCoordinates(mapWidth, y);
-        if (y < 0) agent.setCoordinates(x, 0);
-        if (y > mapHeight) agent.setCoordinates(x, mapHeight);
+        if (x < 0) agent.setCoordinates(mapWidth, y);
+        if (x > mapWidth) agent.setCoordinates(0, y);
+        if (y < 0) agent.setCoordinates(x, mapHeight);
+        if (y > mapHeight) agent.setCoordinates(x, 0);
     }
 }
 
@@ -169,25 +155,6 @@ int Model::getAliveAgents() const {
         [](const std::unique_ptr<Agent>& agent) {
             return agent->isAlive();
         });
-}
-
-void Model::printStatistics() const {
-    std::cout << "=== Simulation Statistics ===" << std::endl;
-    std::cout << "Steps completed: " << stepsCompleted << std::endl;
-    std::cout << "Alive agents: " << getAliveAgents() << std::endl;
-    std::cout << "Agents died: " << agentsDied << std::endl;
-    std::cout << "Energy collected: " << totalEnergyCollected << std::endl;
-    std::cout << "Food consumed: " << foodConsumed << std::endl;
-    std::cout << "Food remaining: " << foods.size() << std::endl;
-    std::cout << "Base energy: " << base.getEnergy() << std::endl;
-    
-    int scouts = 0, workers = 0;
-    for (const auto& agent : agents) {
-        if (dynamic_cast<Scout*>(agent.get())) scouts++;
-        else if (dynamic_cast<Worker*>(agent.get())) workers++;
-    }
-    std::cout << "Scouts: " << scouts << ", Workers: " << workers << std::endl;
-    std::cout << "=============================" << std::endl;
 }
 
 void Model::displayMap() const {
