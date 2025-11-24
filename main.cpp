@@ -10,17 +10,17 @@ int main() {
     cout << "=== Ant Colony Simulation System ===" << endl;
     cout << "Starting simulation..." << endl;
     
-    Model model(800, 600);
+    Model model(100, 100);
     
-    model.initializeSimulation(0, 200, 1);
+    model.initializeSimulation(0, 200, 2);
 
     
     cout << "\nPress Enter to start step-by-step simulation..." << endl;
     cin.get();
     
-    const int totalSteps = 100000;
+    const int totalSteps = 10000;
     
-    for (int step = 1; step <= totalSteps; step+= 200) {
+    for (int step = 1; step <= totalSteps; step+= 1) {
         
         model.displayMap();
         model.simulateStep();

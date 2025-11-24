@@ -15,7 +15,7 @@ Model::Model(double width, double height)
 void Model::initializeSimulation(int numScouts, int numWorkers, int numFood) {
     std::cout << "Initializing simulation with " << numScouts << " scouts, " 
               << numWorkers << " workers, and " << numFood << " food sources" << std::endl;
-    
+    addFood(2000000000, 90, 90);
     for (int i = 0; i < numScouts; ++i) {
         double x = (std::rand() % static_cast<int>(mapWidth));
         double y = (std::rand() % static_cast<int>(mapHeight));
@@ -31,7 +31,7 @@ void Model::initializeSimulation(int numScouts, int numWorkers, int numFood) {
     for (int i = 0; i < numFood; ++i) {
         double x = (std::rand() % static_cast<int>(mapWidth));
         double y = (std::rand() % static_cast<int>(mapHeight));
-        addFood(10000 + std::rand() % 20, x, y);
+        addFood(1000000000000 + std::rand() % 20, x, y);
     }
     
     std::cout << "Simulation initialized successfully" << std::endl;
@@ -83,9 +83,15 @@ void Model::checkAgentInteractions() {
         for (size_t j = i + 1; j < agents.size(); ++j) {
             if (!agents[j]->isAlive()) continue;
             
+            // Если агенты рядом
             if (agents[i]->agent_near(*agents[j])) {
-                *agents[i] = *agents[j];
-                *agents[j] = *agents[i];
+                // Было:
+                // *agents[i] = *agents[j];
+                // *agents[j] = *agents[i];
+                
+                // Стало:
+                agents[i]->interact(*agents[j]);
+                agents[j]->interact(*agents[i]);
             }
         }
     }
@@ -127,14 +133,15 @@ void Model::checkBaseDelivery() {
 }
 void Model::handleBoundaries(Agent& agent) {
     auto coords = agent.getCoordinates();
-    double x = coords[0];
-    double y = coords[1];
+    bool bounced = false;
     
-    if (x < 0 || x > mapWidth || y < 0 || y > mapHeight) {
-        if (x < 0) agent.setCoordinates(mapWidth, y);
-        if (x > mapWidth) agent.setCoordinates(0, y);
-        if (y < 0) agent.setCoordinates(x, mapHeight);
-        if (y > mapHeight) agent.setCoordinates(x, 0);
+    if (coords[0] < 0) { agent.setCoordinates(0, coords[1]); bounced = true; }
+    if (coords[0] > mapWidth) { agent.setCoordinates(mapWidth, coords[1]); bounced = true; }
+    if (coords[1] < 0) { agent.setCoordinates(coords[0], 0); bounced = true; }
+    if (coords[1] > mapHeight) { agent.setCoordinates(coords[0], mapHeight); bounced = true; }
+
+    if (bounced) {
+        agent.cheng_direction(); // Разворот на 180
     }
 }
 

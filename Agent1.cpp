@@ -9,22 +9,40 @@
 #endif
 
 Agent::Agent(double x, double y)
-    : speed(10.0), radius(100), energy(1000), ame(1), direction(rand() % 400/ 100), distA(100000), distB(100000) {
+    : speed(10.0), radius(100), energy(100000), ame(0), direction(rand() % 400/ 100), distA(100000), distB(100000) {
     coordinates[0] = x;
     coordinates[1] = y;
 }
 
-void Agent::operator = (Agent& other) {
-    if (distB > other.distB + 50.0 ){
+// ПОЛНОСТЬЮ ЗАМЕНИТЕ реализацию operator = на этот код
+
+void Agent::interact(const Agent& other) {
+    // Логика: если у соседа путь короче (с учетом штрафа за расстояние +50),
+    // то запоминаем его путь и поворачиваемся к нему.
+
+    // Проверяем путь до цели B (База)
+    if (distB > other.distB + 50.0) {
         distB = other.distB + 50.0;
+        
+        // Если наша текущая цель (ame) == 1 (ищем Базу), то поворачиваем
         if (ame == 1) {
-            direction = atan((other.coordinates[1]- coordinates[1])/(other.coordinates[0]- coordinates[0]));
+            double dy = other.coordinates[1] - coordinates[1];
+            double dx = other.coordinates[0] - coordinates[0];
+            // ВАЖНО: используем atan2 вместо atan
+            direction = atan2(dy, dx);
         }
     }
-    if (distA > other.distA + 50.0){
+
+    // Проверяем путь до цели A (Еда)
+    if (distA > other.distA + 50.0) {
         distA = other.distA + 50.0;
+        
+        // Если наша текущая цель (ame) == 0 (ищем Еду), то поворачиваем
         if (ame == 0) {
-            direction = atan((other.coordinates[1]- coordinates[1])/(other.coordinates[0]- coordinates[0]));
+            double dy = other.coordinates[1] - coordinates[1];
+            double dx = other.coordinates[0] - coordinates[0];
+            // ВАЖНО: используем atan2 вместо atan
+            direction = atan2(dy, dx);
         }
     }
 }
@@ -37,7 +55,7 @@ bool Agent::agent_near(const Agent& otheragent) const {
     double dx = coordinates[0] - otheragent.coordinates[0];
     double dy = coordinates[1] - otheragent.coordinates[1];
     double distance = sqrt(dx*dx + dy*dy);
-    return distance <= 50.0;
+    return distance <= 25.0;
 
 }
 
@@ -74,8 +92,8 @@ void Agent::moove() {
     
     // speed = speed * ((rand() % 400 - 200) / 10000.0 + 1);
     // direction = direction + ((rand() % 400 - 200) / 10000.0);
-    distA += speed;
-    distB += speed;
+    distA += speed * 2;
+    distB += speed *2;
     
     energy--;
 }

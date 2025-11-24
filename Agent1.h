@@ -22,7 +22,9 @@ public:
     Agent(double x, double y);
     virtual ~Agent() = default;
 
-    virtual void operator = (Agent& other);
+    virtual void interact(const Agent& other);
+
+    // virtual void operator = (Agent& other);
 
     bool isAlive() const;
 

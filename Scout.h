@@ -6,7 +6,10 @@
 class Scout : public Agent {
 public:
     Scout(double x, double y);
-    void operator=(Agent& other) override;
+    
+    // Заменили operator= на interact
+    // const Agent& other — потому что мы только читаем данные соседа
+    void interact(const Agent& other) override;
 };
 
 #endif // SCOUT_H
