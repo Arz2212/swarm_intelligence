@@ -16,8 +16,8 @@ public:
     int getEnergy() const;
     std::array<int, 2> getCoordinates() const;
     
-    int consumeEnergy();
-    bool is_energy() const;
+    int consumeEnergy(); // передача энергии 
+    bool is_energy() const; // есть ли еще энергия
 };
 
 #endif // FOOD_H

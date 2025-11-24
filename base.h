@@ -18,7 +18,7 @@ public:
     
     int create();
     bool is_energy() const;
-    void receiveEnergy(int amount);
+    void receiveEnergy(int amount); // получение энергии 
 };
 
 #endif // BASE_H

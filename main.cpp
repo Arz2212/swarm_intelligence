@@ -10,9 +10,9 @@ int main() {
     cout << "=== Ant Colony Simulation System ===" << endl;
     cout << "Starting simulation..." << endl;
     
-    Model model(100, 100);
+    Model model(800, 800);
     
-    model.initializeSimulation(0, 200, 2);
+    model.initializeSimulation(0, 1000, 2);
 
     
     cout << "\nPress Enter to start step-by-step simulation..." << endl;
@@ -25,7 +25,7 @@ int main() {
         model.displayMap();
         model.simulateStep();
         
-        this_thread::sleep_for(chrono::milliseconds(10));
+        this_thread::sleep_for(chrono::milliseconds(400));
         
         if (model.getAliveAgents() == 0) {
             cout << "All agents have died. Simulation ending early." << endl;

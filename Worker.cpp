@@ -25,8 +25,7 @@ void Worker::deliverToBase(Base& base) {
         cheng_direction();
         distB = 0;
     } 
-    if (base_near(base) && carriedEnergy > 0 && ame == 1) {
-        base.receiveEnergy(carriedEnergy);
+    if (base_near(base) && ame == 1) {
         resetCarriedEnergy();
         cheng_ame();
     }

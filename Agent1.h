@@ -16,6 +16,7 @@ protected:
     int radius; // радиус крика
     double speed; 
     int energy;
+    int deafTimer;
     double direction;
     
 public:

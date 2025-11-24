@@ -15,8 +15,8 @@ public:
     void moove() override;
     void collectFood(Food& food); // забирает еду
     void deliverToBase(Base& base); // доставляет еду
-    int getCarriedEnergy() const;
-    void resetCarriedEnergy();
+    int getCarriedEnergy() const; // сколько еды осталось 
+    void resetCarriedEnergy(); // перещзагрузка
 };
 
 #endif // WORKER_H

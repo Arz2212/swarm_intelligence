@@ -6,7 +6,7 @@
 
 Model::Model(double width, double height) 
     : mapWidth(width), mapHeight(height), 
-      base(1000, width/2, height/2, 200),
+      base(1000, 50, 50, 50),
       totalEnergyCollected(0), stepsCompleted(0), 
       agentsDied(0), foodConsumed(0) {
     std::srand(std::time(0));
@@ -15,7 +15,7 @@ Model::Model(double width, double height)
 void Model::initializeSimulation(int numScouts, int numWorkers, int numFood) {
     std::cout << "Initializing simulation with " << numScouts << " scouts, " 
               << numWorkers << " workers, and " << numFood << " food sources" << std::endl;
-    addFood(2000000000, 90, 90);
+    addFood(2000000000, mapHeight - 50, mapWidth - 50);
     for (int i = 0; i < numScouts; ++i) {
         double x = (std::rand() % static_cast<int>(mapWidth));
         double y = (std::rand() % static_cast<int>(mapHeight));
